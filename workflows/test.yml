@@ -1,6 +1,6 @@
 name: Run Unit Tests
 
-on: [push, pull_request]  # Run tests on every push and pull request
+on: [push, pull_request]  # Runs tests on every push and pull request
 
 jobs:
   test:
@@ -16,8 +16,9 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          pip install --upgrade pip
           pip install pytest pandas openpyxl nltk
           python -c "import nltk; nltk.download('stopwords')"
 
       - name: Run Tests
-        run: pytest test_similarity.py
+        run: pytest tests/test_similarity.py
