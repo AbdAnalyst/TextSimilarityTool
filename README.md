@@ -5,28 +5,29 @@
 📌 About This Project
 
 TextSimilarityTool is designed to compare textual data by removing stopwords and punctuation, calculating word overlap, and highlighting similarities in an easy-to-read format. It’s useful for risk assessments, duplicate detection, content comparison, and other NLP-related tasks.
-⸻
+
+----
 
 ## ⚙️ Project Requirements
 
 ### 🎯 Objective
 
 The goal of this project is to provide a simple yet effective text similarity detection tool that can:
-	•	Analyze textual descriptions to find common words.
-	•	Ignore stopwords and punctuation for more accurate similarity results.
-	•	Provide visual and tabular output in both HTML and Excel formats.
-	•	Support large datasets efficiently.
+	• Analyze textual descriptions to find common words.
+	• Ignore stopwords and punctuation for more accurate similarity results.
+	• Provide visual and tabular output in both HTML and Excel formats.
+	• Support large datasets efficiently.
 
 #### 📌 Specification
 
 This project follows these specifications:
-	•	Uses Python 3.7+ for text analysis.
-	•	Applies NLP to process and clean text.
-	•	Bag-of-Words approach is used to compute text similarity.
-	•	Generates reports in:
-	•	HTML: Highlights common words for easy readability.
-	•	Excel: Stores results with partial font coloring for common words.
-	•	Works on any dataset with textual descriptions.
+	• Uses Python 3.7+ for text analysis.
+	• Applies NLP to process and clean text.
+	• Bag-of-Words approach is used to compute text similarity.
+	• Generates reports in:
+	• HTML: Highlights common words for easy readability.
+	• Excel: Stores results with partial font coloring for common words.
+	• Works on any dataset with textual descriptions.
 
 #### 🔧 Dependencies
 
@@ -45,22 +46,23 @@ Additionally, download the stopwords dataset for NLTK:
 
 import nltk
 nltk.download('stopwords')
-⸻
+
+------- 
 
 #### 🚀 Getting Started
 
-Installation
-	1.	Clone this repository:
+**Installation**
+1.      Clone this repository:
 
 git clone https://github.com/your-username/TextSimilarityTool.git
 cd TextSimilarityTool
 
-	2.	Install required dependencies (as mentioned above).
+2.	Install required dependencies (as mentioned above).
 
-Usage
-	•	Place your dataset in the project folder (or use the provided dummy dataset).
-	•	Run the script to analyze text similarity and generate reports in HTML and Excel.
-	•	Open the HTML file for a visual representation of word overlap.
+**Usage**
+• Place your dataset in the project folder (or use the provided dummy dataset).
+• Run the script to analyze text similarity and generate reports in HTML and Excel.
+• Open the HTML file for a visual representation of word overlap.
 
 python similarity_analysis.py
 
