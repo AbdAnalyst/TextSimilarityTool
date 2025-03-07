@@ -1,6 +1,6 @@
 name: Run Unit Tests
 
-on: [push, pull_request]  # Runs tests on every push and pull request
+on:
 
 jobs:
   test:
@@ -19,9 +19,6 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install pytest pandas openpyxl nltk
           python -c "import nltk; nltk.download('stopwords')"
-
-      - name: Verify pytest Installation
-        run: python -m pytest --version  # This checks if pytest is installed
 
       - name: Run Tests
         run: python -m pytest tests/
