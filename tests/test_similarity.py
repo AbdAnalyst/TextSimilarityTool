@@ -9,12 +9,25 @@ This script tests the functions in `stored_procedure.py`
 to ensure accuracy in text similarity calculations, data loading, and file generation.
 
 Run Tests:
-- Install pytest (if not installed): pip install pytest
+- If pytest is not installed, it will be automatically installed.
 - Run tests using: pytest test_similarity.py
 """
 
 import os
-import pytest
+import subprocess
+import sys
+
+# ========================================================
+# 1) Ensure pytest is Installed
+# ========================================================
+try:
+    import pytest
+except ImportError:
+    print("pytest not found. Installing...")
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "pytest"])
+    import pytest
+
+# Import functions to test
 from stored_procedure import clean_and_tokenize, calculate_similarity, load_data, save_results_excel
 
 # Sample texts for testing
@@ -23,7 +36,7 @@ text2 = "High humidity can cause heat stress in workers."
 text3 = "This is a completely unrelated sentence."
 
 # ========================================================
-# 1) Test Text Cleaning & Tokenization
+# 2) Test Text Cleaning & Tokenization
 # ========================================================
 def test_clean_and_tokenize():
     tokens = clean_and_tokenize(text1)
@@ -33,7 +46,7 @@ def test_clean_and_tokenize():
     assert "due" not in tokens, "Stopword 'due' should be removed."
 
 # ========================================================
-# 2) Test Similarity Calculation
+# 3) Test Similarity Calculation
 # ========================================================
 def test_calculate_similarity():
     sim1, common1 = calculate_similarity(text1, text2)
@@ -44,7 +57,7 @@ def test_calculate_similarity():
     assert sim2 == 0.0, "Unrelated texts should have 0% similarity."
 
 # ========================================================
-# 3) Test Data Loading
+# 4) Test Data Loading
 # ========================================================
 @pytest.mark.parametrize("file_path, column_name", [
     ("riskAssessment_dummy_dataset.xlsx", "describeTheSpecificHazards"),
@@ -55,7 +68,7 @@ def test_load_data(file_path, column_name):
     assert len(data) > 0, "Dataset should not be empty."
 
 # ========================================================
-# 4) Test Excel File Generation
+# 5) Test Excel File Generation
 # ========================================================
 def test_save_results_excel():
     test_data = [
