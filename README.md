@@ -1,15 +1,15 @@
-TextSimilarityTool
+# Text Similarity Tool
 
-🚀 Welcome to TextSimilarityTool – a powerful Python-based tool for analyzing text similarity!
+🚀 Welcome to **TextSimilarityTool** – a powerful Python-based tool for analyzing text similarity!
 
 📌 About This Project
 
 TextSimilarityTool is designed to compare textual data by removing stopwords and punctuation, calculating word overlap, and highlighting similarities in an easy-to-read format. It’s useful for risk assessments, duplicate detection, content comparison, and other NLP-related tasks.
 ⸻
 
-⚙️ Project Requirements
+## ⚙️ Project Requirements
 
-🎯 Objective
+### 🎯 Objective
 
 The goal of this project is to provide a simple yet effective text similarity detection tool that can:
 	•	Analyze textual descriptions to find common words.
@@ -17,7 +17,7 @@ The goal of this project is to provide a simple yet effective text similarity de
 	•	Provide visual and tabular output in both HTML and Excel formats.
 	•	Support large datasets efficiently.
 
-📌 Specification
+#### 📌 Specification
 
 This project follows these specifications:
 	•	Uses Python 3.7+ for text analysis.
@@ -28,7 +28,7 @@ This project follows these specifications:
 	•	Excel: Stores results with partial font coloring for common words.
 	•	Works on any dataset with textual descriptions.
 
-🔧 Dependencies
+#### 🔧 Dependencies
 
 To run this project, you need the following Python libraries:
 	•	pandas – For data handling
@@ -47,7 +47,7 @@ import nltk
 nltk.download('stopwords')
 ⸻
 
-🚀 Getting Started
+#### 🚀 Getting Started
 
 Installation
 	1.	Clone this repository:
@@ -66,10 +66,10 @@ python similarity_analysis.py
 
 ⸻
 
-📝 Contributing
+## 📝 Contributing
 
 Contributions are welcome! Feel free to submit issues or pull requests to improve the tool.
 
-📄 License
+## 📄 License
 
 This project is open-source and available under the MIT License.
