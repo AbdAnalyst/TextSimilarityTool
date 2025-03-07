@@ -15,11 +15,19 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+    - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: test code
-        run: python tests/test_similarity.py
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pytest pandas openpyxl nltk
+          python -c "import nltk; nltk.download('stopwords')"
+
+      - name: Run Tests
+        run: pytest tests/test_similarity.py
