@@ -10,7 +10,13 @@ Run Tests:
 """
 
 import os
+import sys
 import pytest
+
+# 🔧 Add the parent directory to the sys.path so tests can import stored_procedure.py
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+# Import the functions from stored_procedure.py
 from stored_procedure import clean_and_tokenize, calculate_similarity, load_data, save_results_excel
 
 # Sample texts for testing
