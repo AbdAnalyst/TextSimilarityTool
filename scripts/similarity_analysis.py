@@ -18,97 +18,106 @@ Usage:
 2. Download NLTK stopwords:
    import nltk
    nltk.download('stopwords')
-3. Place the dataset (CSV file) in the same folder.
+3. Place the dataset (Excel file) in the same folder.
 4. Run the script:
    python similarity_analysis.py
 """
 
 import re
 import pandas as pd
+from IPython.display import display, HTML, FileLink
 import openpyxl
-from nltk.corpus import stopwords
+from openpyxl.styles import Font
+from openpyxl.cell.rich_text import CellRichText, TextBlock
+
 import nltk
+from nltk.corpus import stopwords
 
-# Ensure NLTK stopwords are available
-nltk.download('stopwords')
+# 1) Load Data
 stop_words = set(stopwords.words('english'))
+df = pd.read_excel("VariedRiskAssessmentDataset.xlsx", engine="openpyxl")
+col = "describeTheSpecificHazards"  # The column to analyze
+text_data = df[col].dropna().tolist()[:20]  # Only take first 20 rows
 
-# Load data from CSV
-dataset_filename = "VariedRiskAssessmentDataset.csv"
-column_to_analyze = "describeTheSpecificHazards"
+# 2) Clean & Tokenize
+def clean_tokenize(txt):
+    """
+    Lowercases text, removes punctuation and stopwords,
+    returns a set of valid alphanumeric tokens.
+    """
+    txt = txt.lower()
+    tokens = re.findall(r"[a-z0-9]+", txt)
+    return {t for t in tokens if t not in stop_words}
 
-df = pd.read_csv(dataset_filename)
+# 3) Calculate Overlap
+def bow_sim(txt1, txt2):
+    """
+    Returns overlap percentage and the set of common tokens.
+    """
+    w1 = clean_tokenize(txt1)
+    w2 = clean_tokenize(txt2)
+    common = w1.intersection(w2)
+    avg_size = (len(w1) + len(w2)) / 2.0
+    if avg_size == 0:
+        return 0.0, set()
+    return (len(common) / avg_size) * 100, common
 
-if column_to_analyze not in df.columns:
-    raise ValueError(f"Column '{column_to_analyze}' not found in the dataset.")
+# 4) Highlight Common Words in HTML
+def highlight_common(txt, common_set, color="#FFD54F"):
+    """
+    Highlights tokens in 'txt' if they appear in 'common_set'.
+    Returns an HTML string with highlighted text.
+    """
+    orig_tokens = re.findall(r"\S+", txt)
+    highlighted = []
+    for token in orig_tokens:
+        cleaned_parts = re.findall(r"[a-z0-9]+", token.lower())
+        if any(cp in common_set for cp in cleaned_parts):
+            highlighted.append(f"<span style='background-color:{color}'>{token}</span>")
+        else:
+            highlighted.append(token)
+    return " ".join(highlighted)
 
-text_data = df[column_to_analyze].dropna().tolist()
-
-# Function to clean and tokenize text
-def clean_and_tokenize(text):
-    text = text.lower()
-    tokens = re.findall(r"[a-z0-9]+", text)
-    return set(t for t in tokens if t not in stop_words)
-
-# Function to calculate text similarity
-def bag_of_words_similarity(text1, text2):
-    words1, words2 = clean_and_tokenize(text1), clean_and_tokenize(text2)
-    common_words = words1.intersection(words2)
-    avg_size = (len(words1) + len(words2)) / 2.0
-    similarity_percentage = (len(common_words) / avg_size) * 100 if avg_size else 0.0
-    return similarity_percentage, common_words
-
-# Function to highlight common words in HTML
-def highlight_common_words(text, common_words, color="#FFD54F"):
-    tokens = re.findall(r"\S+", text)
-    return " ".join(
-        f"<span style='background-color:{color}'>{token}</span>" if re.sub(r'\W+', '', token.lower()) in common_words else token
-        for token in tokens
-    )
-
-# Run comparisons
-comparisons = []
+# 5) Compare Each Pair & Collect Results
+results = []
 for i in range(len(text_data)):
-    for j in range(i + 1, len(text_data)):
-        text1, text2 = text_data[i], text_data[j]
-        similarity, common_words = bag_of_words_similarity(text1, text2)
+    for j in range(i+1, len(text_data)):
+        t1 = text_data[i]
+        t2 = text_data[j]
+        similarity, common_w = bow_sim(t1, t2)
+        
+        highlighted_1 = highlight_common(t1, common_w, color="#FFD54F")
+        highlighted_2 = highlight_common(t2, common_w, color="#81C784")
+        
+        results.append((t1, t2, similarity, sorted(common_w), highlighted_1, highlighted_2))
 
-        comparisons.append({
-            "Text 1": text1,
-            "Text 2": text2,
-            "Similarity %": round(similarity, 2),
-            "Common Words": ", ".join(sorted(common_words)) if common_words else "None",
-        })
+# Keep only first 20 comparison results
+results = results[:20]
 
-# Keep only the first 20 rows for HTML and Excel output (without sorting)
-top_comparisons = comparisons[:20]
-
-# Generate HTML report
+# Build HTML Table
 html_rows = []
-for comp in top_comparisons:
-    highlighted_text1 = highlight_common_words(comp["Text 1"], set(comp["Common Words"].split(", ")), "#FFD54F")
-    highlighted_text2 = highlight_common_words(comp["Text 2"], set(comp["Common Words"].split(", ")), "#81C784")
+for (txt1, txt2, sim, common, h1, h2) in results:
+    common_str = ", ".join(common) if common else "None"
+    row_html = f"""
+    <tr>
+      <td style="vertical-align:top;">{txt1}</td>
+      <td style="vertical-align:top;">{txt2}</td>
+      <td style="vertical-align:top; text-align:center;">{sim:.2f}%</td>
+      <td style="vertical-align:top;">{common_str}</td>
+      <td style="vertical-align:top;">{h1}</td>
+      <td style="vertical-align:top;">{h2}</td>
+    </tr>
+    """
+    html_rows.append(row_html)
 
-    html_rows.append(f"""
-        <tr>
-            <td>{comp['Text 1']}</td>
-            <td>{comp['Text 2']}</td>
-            <td style="text-align:center;">{comp['Similarity %']:.2f}%</td>
-            <td>{comp['Common Words']}</td>
-            <td>{highlighted_text1}</td>
-            <td>{highlighted_text2}</td>
-        </tr>
-    """)
-
-html_output = f"""
-<h2>First 20 Text Similarity Analysis Results</h2>
-<p>Displaying the first 20 text comparisons as they appear.</p>
+html_table = f"""
+<h2>Overlap (No Stopwords or Punctuation)</h2>
 <table border="1" style="border-collapse:collapse;width:100%;">
   <thead>
     <tr>
-      <th>Original Text 1</th>
-      <th>Original Text 2</th>
-      <th>Similarity %</th>
+      <th>Text 1</th>
+      <th>Text 2</th>
+      <th>Overlap %</th>
       <th>Common Words</th>
       <th>Highlighted Text 1</th>
       <th>Highlighted Text 2</th>
@@ -120,21 +129,73 @@ html_output = f"""
 </table>
 """
 
-html_filename = "first_20_overlap_results.html"
-with open(html_filename, "w", encoding="utf-8") as f:
-    f.write(html_output)
+# Display HTML in Jupyter (if run interactively)
+try:
+    display(HTML(html_table))
+except:
+    pass
 
-print(f"HTML report (First 20) saved to {html_filename}")
+# Write HTML to file
+out_html = "similarity_results.html"
+with open(out_html, "w", encoding="utf-8") as f:
+    f.write(html_table)
+try:
+    display(FileLink(out_html))
+except:
+    pass
 
-# Save first 20 results in Excel
-excel_filename = "first_20_overlap_results.xlsx"
+print(f"HTML results saved to '{out_html}'.")
+
+# 6) Create an Excel file with partial font-color highlights
+def build_rich_text(txt, common_set, highlight_color="FFFF0000"):
+    from openpyxl.cell.rich_text import CellRichText, TextBlock
+    from openpyxl.cell.text import InlineFont
+    
+    tokens = re.findall(r"\S+", txt)
+    blocks = []
+    for i, token in enumerate(tokens):
+        space = " " if i < len(tokens) - 1 else ""
+        cleaned_parts = re.findall(r"[a-z0-9]+", token.lower())
+        if any(cp in common_set for cp in cleaned_parts):
+            # highlight token in red
+            blocks.append(TextBlock(InlineFont(color=highlight_color), token + space))
+        else:
+            blocks.append(TextBlock(InlineFont(color="FF000000"), token + space))
+    return CellRichText(blocks)
+
 wb = openpyxl.Workbook()
 ws = wb.active
-ws.title = "First 20 Text Similarity Results"
-ws.append(["Text 1", "Text 2", "Similarity %", "Common Words"])
+ws.title = "Similarity Results"
+ws.append([
+    "Pair #", "Overlap %", "Common Words",
+    "Text 1", "Text 2", "Highlighted 1", "Highlighted 2"
+])
 
-for comp in top_comparisons:
-    ws.append([comp["Text 1"], comp["Text 2"], comp["Similarity %"], comp["Common Words"]])
+pair_num = 1
+for (txt1, txt2, sim, common, _, _) in results:
+    row_idx = ws.max_row + 1
+    sim_str = f"{sim:.2f}%"
+    common_str = ", ".join(common) if common else "None"
+    
+    # Add plain text & overlap
+    ws.cell(row=row_idx, column=1).value = f"Pair {pair_num}"
+    ws.cell(row=row_idx, column=2).value = sim_str
+    ws.cell(row=row_idx, column=3).value = common_str
+    ws.cell(row=row_idx, column=4).value = txt1
+    ws.cell(row=row_idx, column=5).value = txt2
+    
+    # Build partial-color text
+    cell_rich1 = build_rich_text(txt1, set(common))
+    cell_rich2 = build_rich_text(txt2, set(common))
+    ws.cell(row=row_idx, column=6).value = cell_rich1
+    ws.cell(row=row_idx, column=7).value = cell_rich2
+    
+    pair_num += 1
 
-wb.save(excel_filename)
-print(f"First 20 results saved to {excel_filename}")
+out_excel = "similarity_results.xlsx"
+wb.save(out_excel)
+print(f"Excel results saved to '{out_excel}'.")
+try:
+    display(FileLink(out_excel))
+except:
+    pass
