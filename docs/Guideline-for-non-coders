@@ -1,0 +1,98 @@
+What Does This Script Do?
+
+This script checks how similar pieces of text are to each other. It takes blocks of text from a file (like an Excel sheet), finds the words they have in common, and shows you:
+1. How similar they are in percentage terms.
+2. Which words they share.
+3. A way to see those shared words highlighted in color.
+
+Basically, if you have a list of sentences or descriptions, the script will help you see which sentences share many common words.
+
+⸻
+
+Why Is This Useful?
+•	Comparison: You might have many descriptions or notes and want to see which ones are closely related.
+•	Duplicate Detection: If some texts are almost the same, the script tells you.
+•	Highlighting: It color-codes the repeated words so you can visually spot them quickly.
+
+⸻
+
+How To Use It
+1.	I used Anaconda and from there Jupyter Notebook for this code
+
+pip install pandas openpyxl nltk ipython
+
+
+	•	Press Enter.
+
+3. Download NLTK Stopwords (A List of Common Words Like “the”, “a”, “an”)
+	•	In Python, type:
+
+import nltk
+nltk.download('stopwords')
+
+
+•	This makes sure the script can ignore very common words.
+
+4. Get Your Data Ready
+	•	You should have an Excel file with text in at least one column.
+	•	Put that Excel file in the same folder as the script.
+	•	Change the script so it knows which column to read (by default, it looks for a column named describeTheSpecificHazards).
+5. Run The Script
+	•	In your terminal, navigate to the folder where the script is located (for example, cd path_to_your_folder).
+	•	Then type:
+
+python similarity_analysis.py
+
+
+	•	This will run the script.
+
+⸻
+
+What Happens Next?
+1. The Script Reads Your Excel File
+	•	It looks at your chosen column and takes up to 20 rows of text to compare.
+2. It Cleans the Text
+	•	Turns everything to lowercase.
+	•	Removes common “stopwords” like “the” and “is,” and takes out punctuation.
+	•	This is to focus on the meaningful words only.
+3. It Compares Each Pair of Texts
+	•	It calculates a percentage for how similar the texts are.
+	•	Lists the common words each pair has.
+4. It Creates an HTML File
+	•	The file is named something like similarity_results.html.
+	•	This file shows each pair, their similarity percentage, and the words in common.
+	•	You will also see each text with highlighted words, so you can quickly spot the overlaps.
+5. It Creates an Excel File
+	•	The file is named something like similarity_results.xlsx.
+	•	Inside, you’ll see the same comparisons.
+	•	There’s also a special trick: words that appear in both texts are colored inside the same cell. This makes it easy to see what’s repeated.
+
+⸻
+
+What Should I Look At First?
+	•	Open the HTML file (double-click or open it in your browser).
+	•	Scroll through the table.
+	•	You can quickly see which texts match strongly. A high overlap means they share more unique words.
+
+⸻
+
+Questions or Changes?
+	•	If you need to compare more than 20 lines, open the script and look for the line text_data = df[col].dropna().tolist()[:20]. Change 20 to however many rows you want.
+	•	If your Excel column has a different name, change the variable col to match that name.
+	•	If you have a CSV file instead of Excel, you can swap pd.read_excel(...) for pd.read_csv(...), but keep in mind you’ll need to remove engine="openpyxl".
+
+⸻
+
+Summary
+
+This script is meant for non-technical users who just want to compare text. All you do is:
+	•	Install the required tools,
+	•	Update the column and file name if needed,
+	•	Run the script,
+	•	Check your new HTML and Excel files.
+
+It’s a handy, quick way to spot repeated content or see how much overlap there is between different pieces of text.
+
+Enjoy exploring your texts!
+
+If you have any questions pls email me at abdullahh@gmail.com
