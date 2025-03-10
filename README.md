@@ -52,12 +52,13 @@ nltk.download('stopwords')
 #### 🚀 Getting Started
 
 **Installation**
-1.      Clone this repository:
+1. Clone this repository:
 
-git clone https://github.com/your-username/TextSimilarityTool.git
+git clone https://github.com/AbdAnalyst/TextSimilarityTool.git
+
 cd TextSimilarityTool
 
-2.	Install required dependencies (as mentioned above).
+2. Install required dependencies (as mentioned above).
 
 **Usage**
 • Place your dataset in the project folder (or use the provided dummy dataset).
@@ -70,8 +71,12 @@ python similarity_analysis.py
 
 ## 📝 Contributing
 
-Contributions are welcome! Feel free to submit issues or pull requests to improve the tool.
+Contributions are welcome! Feel free to submit issues or pull requests to improve the tool at abdullahh@gmail.com
 
 ## 📄 License
 
 This project is open-source and available under the MIT License.
+
+# About Me
+
+I am a Data Analyst at AtkinsRealis working with different clients to overcome their issues related to Data.
