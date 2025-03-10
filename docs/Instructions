@@ -1,31 +1,26 @@
-# 📊 Similarity Results (Excel File)
+📊 Similarity Results (Excel File)
 
-## ✅ What is this file?
+✅ What is this file?
 
 This Excel file shows the similarity analysis between different pieces of text taken from the dataset.
 
-## 📝 What’s inside?
+📝 What’s inside?
 
 Each row contains:
-	1.	Pair # – The number of the comparison (e.g., Pair 1, Pair 2).
-	2.	Overlap % – How much the two texts share, shown as a percentage.
-	3.	Common Words – Words that appear in both texts.
-	4.	Text 1 – The first piece of text being compared.
-	5.	Text 2 – The second piece of text being compared.
-	6.	Highlighted 1 – Text 1 with common words highlighted in red (font color).
-	7.	Highlighted 2 – Text 2 with common words highlighted in red (font color).
+1. Pair # – The number of the comparison (e.g., Pair 1, Pair 2).
+2. Overlap % – How much the two texts share, shown as a percentage.
+3. Common Words – Words that appear in both texts.
+4. Text 1 – The first piece of text being compared.
+5. Text 2 – The second piece of text being compared.
+6. Highlighted 1 – Text 1 with common words highlighted in red (font color).
+7. Highlighted 2 – Text 2 with common words highlighted in red (font color).
 
-## 🎨 How to read it?
-	•	Look at Overlap % to see how similar the texts are.
-	•	Check Common Words to see what they share.
-	•	Look at Highlighted 1 & 2 columns to visually spot the repeated words — they will appear in red.
+🎨 How to read it?
+• Look at Overlap % to see how similar the texts are.
+• Check Common Words to see what they share.
+• Look at Highlighted 1 & 2 columns to visually spot the repeated words — they will appear in red.
 
-## 📂 Why is this useful?
-	•	To find repeated or similar content.
-	•	To quickly review overlaps without reading everything line by line.
-	•	To check quality and consistency of descriptions or notes.
-
-## ⚙️ How was this created?
-
-Generated automatically using the Python script from this repository:
-🔗 TextSimilarityTool
+📂 Why is this useful?
+• To find repeated or similar content.
+• To quickly review overlaps without reading everything line by line.
+• To check quality and consistency of descriptions or notes.
